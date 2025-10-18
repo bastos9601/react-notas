@@ -6,16 +6,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Configuración de la base de datos - usando la base de datos local en el backend
-# Usamos ruta absoluta para asegurar que siempre use la base de datos del directorio backend
+# Configuración de la base de datos
+# Usamos ruta absoluta para asegurar que en desarrollo use la base local
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "sistema_notas.db")
-# Imprimir la ruta para verificar dónde se está creando la base de datos
-print(f"Ruta de la base de datos: {DB_PATH}")
+# Imprimir la ruta local para verificar dónde se está creando la base de datos
+print(f"Ruta de la base de datos (local): {DB_PATH}")
 
-# Forzar el uso de la base de datos del directorio backend
-# Ignorar cualquier variable de entorno DATABASE_URL
-DATABASE_URL = f"sqlite:///{DB_PATH}"
+# Usar DATABASE_URL si está definido (producción), de lo contrario usar SQLite local (desarrollo)
+DATABASE_URL = os.getenv("DATABASE_URL") or f"sqlite:///{DB_PATH}"
 
 engine = create_engine(
     DATABASE_URL,

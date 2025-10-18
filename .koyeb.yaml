@@ -1,5 +1,5 @@
 # Configuración de Koyeb para el Sistema de Gestión de Notas
-# Este archivo especifica que usamos Docker en lugar de buildpacks automáticos
+# Despliegue usando Dockerfiles para backend y frontend
 
 services:
   # Servicio Backend (FastAPI)
@@ -10,11 +10,9 @@ services:
       dockerfile_path: backend/Dockerfile
     env:
       - name: SECRET_KEY
-        value: "tu-clave-secreta-muy-segura-para-produccion"
-      - name: DATABASE_URL
-        value: "postgresql://postgres:password@postgres-service:5432/sistema_notas"
-      - name: FRONTEND_URL
-        value: "https://tu-frontend-url.koyeb.app"
+        value: "cambia-esto-en-produccion"
+      # Importante: Define DATABASE_URL en el panel de Koyeb (PostgreSQL gestionado)
+      # Ejemplo: postgresql://usuario:password@host:5432/sistema_notas?sslmode=require
     ports:
       - port: 8000
         http:
@@ -38,17 +36,19 @@ services:
       dockerfile_path: frontend/Dockerfile
     env:
       - name: REACT_APP_API_URL
-        value: "https://tu-backend-url.koyeb.app"
+        value: "https://TU_BACKEND_URL.koyeb.app"  # Actualiza tras desplegar backend
+      - name: PORT
+        value: "3001"
     ports:
-      - port: 80
+      - port: 3001
         http:
           paths:
             - path: /
-              port: 80
+              port: 3001
     healthcheck:
       http:
         path: /
-        port: 80
+        port: 3001
       initial_delay: 30s
       interval: 10s
       timeout: 5s
